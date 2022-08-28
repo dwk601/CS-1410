@@ -23,25 +23,26 @@ with open("ratings.txt", "r") as ratings:
 ratings.close()
 
 """The function prompt the user to enter in a single line a firstname and lastname,
-a symbol (>, <, =) and a number. The function returns a list of three values.
+a symbol (>, <, =) and a number. The function returns a list of two values, and one integer value.
 """
 
 
 def prompt_user():
     user_input = input("Enter a reader's name: ")
-    user_input = user_input.split()
-    input_list = []
-    if len(user_input) == 3:
-        for i in user_input:
-            input_list.append(i)
-        return input_list
-    elif len(user_input) == 4:
-        for i in user_input:
-            input_list.append(i)
-        return input_list[0] + " " + input_list[1], input_list[2], input_list[3]
-    else:
-        print("Invalid input")
-        return prompt_user()
+    user_input = [int(v) if v.isnumeric() else v for v in input().split()]
+    print(user_input)
+
+    # if len(user_input) == 3:
+    #     for i in user_input:
+    #         input_list.append(i)
+    #     return input_list, number_input
+    # elif len(user_input) == 4:
+    #     for i in user_input:
+    #         input_list.append(i)
+    #     return input_list[0] + " " + input_list[1], input_list[2], number_input
+    # else:
+    #     print("Invalid input")
+    #     return prompt_user()
 
     """Function takes a name, a symbol, and a number.
     The function returns a list of books including the book's title
@@ -75,4 +76,7 @@ def main():
         print(book)
 
 
-print((prompt_user()))
+# if __name__ == "__main__":
+#     main()
+
+prompt_user()
