@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "math": "^0.0.3",
+    "statistics": "^3.3.0",
+    "sys": "^0.0.1",
+    "turtle": "^0.6.1"
+  }
+}
