@@ -8,6 +8,18 @@ class DessertItem():
     def setters(self, name):
         self.name = name
 
+    def get_cost(self):
+        return self.price * self.weight
+
+    def tax_percent(self):
+        return 7.25
+
+    def calculate_cost(self):
+        return self.get_cost() + self.get_cost() * self.tax_percent() / 100
+
+    def calculate_tax(self):
+        return self.get_cost() * self.tax_percent() / 100
+
 
 class Candy(DessertItem):
     def __init__(self, name, price=float, weight=float):
@@ -21,6 +33,9 @@ class Candy(DessertItem):
     def setters(self, price, weight):
         self.price = price
         self.weight = weight
+
+    def calculate_cost(self):
+        return super().calculate_cost()
 
 
 class Cookie(DessertItem):
@@ -36,6 +51,9 @@ class Cookie(DessertItem):
         self.price = price
         self.number = number
 
+    def calculate_cost(self):
+        return super().calculate_cost()
+
 
 class IceCream(DessertItem):
     def __init__(self, name, price=float, scoop=int):
@@ -50,6 +68,9 @@ class IceCream(DessertItem):
         self.price = price
         self.flavor = flavor
 
+    def calculate_cost(self):
+        return super().calculate_cost()
+
 
 class Sundae(IceCream):
     def __init__(self, name, price, scoop, topping=str, topping_price=float):
@@ -63,3 +84,6 @@ class Sundae(IceCream):
     def setters(self, topping, topping_price):
         self.topping = topping
         self.topping_price = topping_price
+
+    def calculate_cost(self):
+        return super().calculate_cost() + self.topping_price

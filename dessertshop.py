@@ -78,6 +78,18 @@ class Order():
     def itemCount(self):
         return len(self.order)
 
+    def order_cost(self):
+        cost = 0
+        for item in self.order:
+            cost += item.calculate_cost()
+        return cost
+
+    def order_tax(self):
+        tax = 0
+        for item in self.order:
+            tax += item.calculate_tax()
+        return tax
+
 
 def main():
     order = Order()
