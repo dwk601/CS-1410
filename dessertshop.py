@@ -115,20 +115,89 @@ class Order():
         return tax
 
 
-def main():
+def main_menu():
     order = Order()
-    order.add(Candy("Gummy Bears", .25, .35))
-    order.add(Cookie("Chocolate Chip", 6, 3.99))
-    order.add(IceCream("Pistachio", 2, .79))
-    order.add(Sundae("Vanilla", 3, .69, "Hot Fudge", 1.29))
-    order.add(Cookie("Oatmeal Raisin", 2, 3.45))
-    order.add(IceCream("Chocolate", 3, .99))
-    order.add(Cookie("Chocolate Chip", 3, 3.99))
+    while True:
+        print("Welcome to the Dessert Shoppe")
+        print("1. Add an item to the order")
+        print("2. Remove an item from the order")
+        print("3. View the order")
+        print("4. Pay for the order")
+        choice = int(input("Enter a choice: "))
+        if choice == 1:
+            print("1. Add a Candy")
+            print("2. Add a Cookie")
+            print("3. Add a Ice Cream")
+            print("4. Add a Sundae")
+            choice = int(input("Enter a choice: "))
+            if choice == 1:
+                name = input("Enter a name: ")
+                price = float(input("Enter a price: "))
+                weight = float(input("Enter a weight: "))
+                order.add(Candy(name, price, weight))
+            elif choice == 2:
+                name = input("Enter a name: ")
+                price = float(input("Enter a price: "))
+                number = int(input("Enter a number: "))
+                order.add(Cookie(name, price, number))
+            elif choice == 3:
+                name = input("Enter a name: ")
+                price = float(input("Enter a price: "))
+                scoop = int(input("Enter a scoop: "))
+                order.add(IceCream(name, price, scoop))
+            elif choice == 4:
+                name = input("Enter a name: ")
+                price = float(input("Enter a price: "))
+                scoop = int(input("Enter a scoop: "))
+                topping = input("Enter a topping: ")
+                topping_price = float(input("Enter a topping price: "))
+                order.add(Sundae(name, price, scoop, topping, topping_price))
+        elif choice == 2:
+            print("1. Remove a Candy")
+            print("2. Remove a Cookie")
+            print("3. Remove a Ice Cream")
+            print("4. Remove a Sundae")
+            choice = int(input("Enter a choice: "))
+            if choice == 1:
+                name = input("Enter a name: ")
+                price = float(input("Enter a price: "))
+                weight = float(input("Enter a weight: "))
+                order.remove(Candy(name, price, weight))
+            elif choice == 2:
+                name = input("Enter a name: ")
+                price = float(input("Enter a price: "))
+                number = int(input("Enter a number: "))
+                order.remove(Cookie(name, price, number))
+            elif choice == 3:
+                name = input("Enter a name: ")
+                price = float(input("Enter a price: "))
+                scoop = int(input("Enter a scoop: "))
+                order.remove(IceCream(name, price, scoop))
+            elif choice == 4:
+                name = input("Enter a name: ")
+                price = float(input("Enter a price: "))
+                scoop = int(input("Enter a scoop: "))
+                topping = input("Enter a topping: ")
+                topping_price = float(input("Enter a topping price: "))
+                order.remove(
+                    Sundae(name, price, scoop, topping, topping_price))
+        elif choice == 3:
+            for item in order.getOrderList():
+                print(item.getters())
+        elif choice == 4:
+            break
+    return order
+
+
+def main():
+    order = main_menu()
+    print("Receipt")
     for item in order.getOrderList():
         print(
-            f"{item.name}: ${item.calculate_cost():.2f} [Tax:{item.calculate_tax():.2f}]")
+            f"{item.name} ${item.calculate_cost():.2f} [Tax: ${item.calculate_tax():.2f}]")
+    print("--------------------------------")
     print(
-        f"Order Subtotals: ${order.order_cost():.2f} [Tax:{order.order_tax():.2f}]")
+        f"Order Subtotals: ${order.order_cost():.2f} [Tax: ${order.order_tax():.2f}]")
     print(f"Order Total: ${order.order_cost() + order.order_tax():.2f}")
     print(f"Total items in the order: {order.itemCount()}")
 
