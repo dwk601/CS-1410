@@ -10,9 +10,9 @@ import packaging
 
 class DessertItem():
     def __init__(self, name, price, packaging):
-        self._name = name
-        self._price = price
-        self._packaging = packaging
+        self.name = name
+        self.price = price
+        self.packaging = packaging
 
     @property
     def name(self):
@@ -41,21 +41,6 @@ class DessertItem():
     def __str__(self):
         return "{} ${:.2f} {}".format(self.name, self.price, self.packaging)
 
-    def __str__(self):
-        return "{} ${:.2f} {}".format(self.name, self.price, self.packaging)
-
-    def __str__(self):
-        return "{} ${:.2f} {}".format(self.name, self.price, self.packaging)
-
-    def __str__(self):
-        return "{} ${:.2f}".format(self.name, self.price)
-
-    def getters(self):
-        return "{} ${:.2f} {}".format(self.name, self.price, self.packaging)
-
-    def __init__(self, name):
-        self.name = name
-
     def getters(self):
         return self.name
 
@@ -77,10 +62,8 @@ class DessertItem():
 
 class Candy(DessertItem):
     def __init__(self, name, price=float, weight=float, packaging="Bag", ):
-        super().__init__(name)
-        self.price = price
+        super().__init__(name, price, packaging)
         self.weight = weight
-        self.packaging = packaging
 
     def getters(self):
         return self.price, self.weight
@@ -98,10 +81,8 @@ class Candy(DessertItem):
 
 class Cookie(DessertItem):
     def __init__(self, name, price=float, number=int, packaging="Box"):
-        super().__init__(name)
-        self.price = price
+        super().__init__(name, price, packaging)
         self.number = number
-        self.packaging = packaging
 
     def getters(self):
         return self.price, self.number
@@ -119,10 +100,8 @@ class Cookie(DessertItem):
 
 class IceCream(DessertItem):
     def __init__(self, name, price=float, scoop=int, packaging="Bowl"):
-        super().__init__(name)
-        self.price = price
+        super().__init__(name, price, packaging)
         self.scoop = scoop
-        self.packaging = packaging
 
     def getters(self):
         return self.price, self.scoop, self.topping, self.topping_price
@@ -140,10 +119,9 @@ class IceCream(DessertItem):
 
 class Sundae(IceCream):
     def __init__(self, name, price, scoop, topping=str, topping_price=float, packaging="Boat"):
-        super().__init__(name, price, scoop)
+        super().__init__(name, price, scoop, packaging)
         self.topping = topping
         self.topping_price = topping_price
-        self.packaging = packaging
 
     def getters(self):
         return self.topping, self.topping_price
@@ -185,8 +163,7 @@ class Order():
         return tax
 
     def __str__(self):
-        total_cost = self.order_cost() + self.order_tax()
-        return f"Total items in the order: {self.itemCount()}\nOrder Subtotals: ${self.order_cost():.2f} [Tax: ${self.order_tax():.2f}]\nTotal: ${total_cost:.2f}"
+        return f"Total items in the order: {self.itemCount()}\nOrder Subtotals: \nOrder Total: "
 
     def order_cost_str(self):
         return f"Order Subtotals: ${self.order_cost():.2f}"

@@ -1,4 +1,4 @@
-import dessert
+import dessert as dessert
 from tabulate import *
 
 
@@ -18,7 +18,14 @@ def main():
     print(tabulate(table, headers=["Item", "Cost", "Tax"]))
     # print(tabulate(table))
     print("------------------------------------------------------")
-    total_table = [order, order.total_cost(), order.total_tax()]
+    total_table = []
+    total_table.append(["Subtotal", order.order_cost()])
+    total_table.append(["Tax", order.order_tax()])
+    total_table.append(["Total", order.order_cost() + order.order_tax()])
+    for i in range(len(total_table)):
+        total_table[i][1] = "$" + str(total_table[i][1])
+    print(tabulate(total_table, headers=["", "Amount"]))
+    # print(tabulate(total_table))
     total_table[1] = "$" + str(total_table[1])
     total_table[2] = "[Tax: $" + str(total_table[2]) + "]"
 
