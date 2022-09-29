@@ -1,4 +1,4 @@
-import packaging
+import packaging as packaging
 
 # set the superclass packaging type within the constructor;
 # the default value for each respective type is as follows:

@@ -12,9 +12,8 @@ def main():
         table.append(
             [item.__str__(), item.calculate_cost(), item.calculate_tax()])
         # edit the elements in the list, add "$"" to the beginning of the cost and tax
-        for i in range(len(table)):
-            table[i][1] = "$" + str(table[i][1])
-            table[i][2] = "[Tax: $" + str(table[i][2]) + "]"
+        table[-1][1] = "$" + str(table[-1][1])
+        table[-1][2] = "[Tax: $" + str(table[-1][2]) + "]"
     print(tabulate(table, headers=["Item", "Cost", "Tax"]))
     # print(tabulate(table))
     print("------------------------------------------------------")
@@ -24,10 +23,9 @@ def main():
     total_table.append(["Total", order.order_cost() + order.order_tax()])
     for i in range(len(total_table)):
         total_table[i][1] = "$" + str(total_table[i][1])
-    print(tabulate(total_table, headers=["", "Amount"]))
-    # print(tabulate(total_table))
-    total_table[1] = "$" + str(total_table[1])
-    total_table[2] = "[Tax: $" + str(total_table[2]) + "]"
+    print(tabulate(total_table, headers=["", ""]))
+    print("------------------------------------------------------")
+    print("Thank you for shopping at the Dessert Shoppe!")
 
 
 if __name__ == "__main__":
