@@ -1,5 +1,6 @@
 import dessert as dessert
 from tabulate import *
+from payment import *
 
 
 def main():
@@ -17,14 +18,18 @@ def main():
     print(tabulate(table, headers=["Item", "Cost", "Tax"]))
     # print(tabulate(table))
     print("------------------------------------------------------")
+    print("Total number of items: " + str(order.itemCount()))
     total_table = []
     total_table.append(["Subtotal", order.order_cost()])
-    total_table.append(["Tax", order.order_tax()])
+    # round the tax to 2 decimal places
+    total_table.append(["Tax", round(order.order_tax(), 2)])
     total_table.append(["Total", order.order_cost() + order.order_tax()])
     for i in range(len(total_table)):
         total_table[i][1] = "$" + str(total_table[i][1])
     print(tabulate(total_table, headers=["", ""]))
+    print("Paid with " + order.pay_method)
     print("------------------------------------------------------")
+
     print("Thank you for shopping at the Dessert Shoppe!")
 
 

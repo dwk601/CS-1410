@@ -1,11 +1,6 @@
 import packaging as packaging
 
-# set the superclass packaging type within the constructor;
-# the default value for each respective type is as follows:
-#Candy: packaging = "Bag"
-#Cookie: packaging = "Box"
-#IceCream: packaging = "Bowl"
-#Sundae: packaging = "Boat"
+from payment import *
 
 
 class DessertItem():
@@ -136,6 +131,12 @@ class Sundae(IceCream):
     def __str__(self):
         return f"{self.name} Sundae ({self.packaging})\n{self.scoop} scoops @ ${self.price:.2f}/scoop\n {self.topping} topping @ "
 
+# Implement the Payment interface.
+# Add an attribute pay_method that has type PayType to implement the interface.
+# The default value for pay method in the constructor should be PayType.CASH.
+# Add the methods to implement the interface, which make payment method readable and writable.
+# Modify __str__ method to include payment type in the order as shown in the example run.
+
 
 class Order():
     def __init__(self):
@@ -162,8 +163,14 @@ class Order():
             tax += item.calculate_tax()
         return tax
 
+    def pay_method(self):
+        return self._pay_method
+
+    def pay_method(self, value):
+        self._pay_method = value
+
     def __str__(self):
-        return f"Total items in the order: {self.itemCount()}\nOrder Subtotals: \nOrder Total: "
+        return f"Total items in the order: {self.itemCount()}\nOrder Subtotals: ${self.order_cost():.2f}\nTax: ${self.order_tax():.2f}\nOrder Total: ${self.order_cost()+self.order_tax():.2f}\nPaid with {self.pay_method}"
 
     def order_cost_str(self):
         return f"Order Subtotals: ${self.order_cost():.2f}"
@@ -175,13 +182,6 @@ class Order():
 def main_menu():
     order = Order()
     while True:
-        # print("Welcome to the Dessert Shoppe")
-        # print("1. Add an item to the order")
-        # print("2. Remove an item from the order")
-        # print("3. View the order")
-        # print("4. Pay for the order")
-        # choice = int(input("Enter a choice: "))
-        # if choice == 1:
         print("1. Add a Candy")
         print("2. Add a Cookie")
         print("3. Add a Ice Cream")
@@ -210,43 +210,24 @@ def main_menu():
             topping = input("Enter a topping: ")
             topping_price = float(input("Enter a topping price: "))
             order.add(Sundae(name, price, scoop, topping, topping_price))
+        # if user enters a blank line, go to the pay_method choice
         elif choice == "":
+            print(order)
+            print("1. Cash")
+            print("2. Credit")
+            print("3. Check")
+            choice = input("Enter a choice: ")
+            if choice == ("1"):
+                order.pay_method = "Cash"
+            elif choice == ("2"):
+                order.pay_method = "Credit"
+            elif choice == ("3"):
+                order.pay_method = "Check"
+            else:
+                print("Invalid choice, please try again.")
+            print(order)
             break
         else:
-            break
+            print("Invalid choice. Please try again.")
+            continue
     return order
-    #     elif choice == 2:
-    #         print("1. Remove a Candy")
-    #         print("2. Remove a Cookie")
-    #         print("3. Remove a Ice Cream")
-    #         print("4. Remove a Sundae")
-    #         choice = int(input("Enter a choice: "))
-    #         if choice == 1:
-    #             name = input("Enter a name: ")
-    #             price = float(input("Enter a price: "))
-    #             weight = float(input("Enter a weight: "))
-    #             order.remove(Candy(name, price, weight))
-    #         elif choice == 2:
-    #             name = input("Enter a name: ")
-    #             price = float(input("Enter a price: "))
-    #             number = int(input("Enter a number: "))
-    #             order.remove(Cookie(name, price, number))
-    #         elif choice == 3:
-    #             name = input("Enter a name: ")
-    #             price = float(input("Enter a price: "))
-    #             scoop = int(input("Enter a scoop: "))
-    #             order.remove(IceCream(name, price, scoop))
-    #         elif choice == 4:
-    #             name = input("Enter a name: ")
-    #             price = float(input("Enter a price: "))
-    #             scoop = int(input("Enter a scoop: "))
-    #             topping = input("Enter a topping: ")
-    #             topping_price = float(input("Enter a topping price: "))
-    #             order.remove(
-    #                 Sundae(name, price, scoop, topping, topping_price))
-    #     elif choice == 3:
-    #         for item in order.getOrderList():
-    #             print(item.getters())
-    #     elif choice == 4:
-    #         break
-    # return order

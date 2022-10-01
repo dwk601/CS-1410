@@ -2,6 +2,7 @@ from pytest import *
 
 # test DessertItem class
 from dessert import *
+from payment import *
 
 
 class testDessertItem(object):
@@ -67,6 +68,28 @@ class testSundae(object):
         assert sundae.packaging == "Boat"
 
 
+class testPayment(object):
+    def test_init(self):
+        payment = Payment(PayType.CARD)
+        assert payment.pay_type == PayType.CARD
+
+    def test_get_payment_type(self):
+        payment = Payment(PayType.CARD)
+        assert payment.get_payment_type() == "CARD"
+
+    def test_get_payment_amount(self):
+        payment = Payment(PayType.CARD)
+        assert payment.get_payment_amount() == 2
+
+    def test_str(self):
+        payment = Payment(PayType.CARD)
+        assert str(payment) == "CARD"
+
+    def test_repr(self):
+        payment = Payment(PayType.CARD)
+        assert repr(payment) == "CARD"
+
+
 if __name__ == "__main__":
     testDessertItem().test_init()
     testDessertItem().test_getters()
@@ -78,5 +101,10 @@ if __name__ == "__main__":
     testCookie().test_init()
     testIceCream().test_init()
     testSundae().test_init()
+    testPayment().test_init()
+    testPayment().test_get_payment_type()
+    testPayment().test_get_payment_amount()
+    testPayment().test_str()
+    testPayment().test_repr()
 
     print("All tests passed!")
