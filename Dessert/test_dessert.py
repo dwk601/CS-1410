@@ -88,6 +88,25 @@ class testPayment(object):
     def test_repr(self):
         payment = Payment(PayType.CARD)
         assert repr(payment) == "CARD"
+        
+class testDessertItemPriceComparison(object):
+    def test_eq(self):
+        dessert1 = DessertItem("cookie", 1.00, "box")
+        dessert2 = DessertItem("cookie", 1.00, "box")
+        assert dessert1 == dessert2
+
+    def test_lt(self):
+        dessert1 = DessertItem("cookie", 1.00, "box")
+        dessert2 = DessertItem("cookie", 2.00, "box")
+        assert dessert1 < dessert2
+
+    def test_gt(self):
+        dessert1 = DessertItem("cookie", 1.00, "box")
+        dessert2 = DessertItem("cookie", 2.00, "box")
+        assert dessert2 > dessert1
+
+
+
 
 
 if __name__ == "__main__":
@@ -106,5 +125,8 @@ if __name__ == "__main__":
     testPayment().test_get_payment_amount()
     testPayment().test_str()
     testPayment().test_repr()
+    testDessertItemPriceComparison().test_eq()
+    testDessertItemPriceComparison().test_lt()
+    testDessertItemPriceComparison().test_gt()
 
     print("All tests passed!")

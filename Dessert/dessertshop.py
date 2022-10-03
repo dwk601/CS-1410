@@ -4,10 +4,10 @@ from payment import *
 
 
 def main():
+    
     order = dessert.main_menu()
     print("------------Receipt------------")
-    # print item.__str__() on the left, item.calculate_cost() on the center,
-    # and item.calculate_tax() on the right in a table format
+    
     table = []
     for item in order.getOrderList():
         table.append(
@@ -15,6 +15,8 @@ def main():
         # edit the elements in the list, add "$"" to the beginning of the cost and tax
         table[-1][1] = "$" + str(table[-1][1])
         table[-1][2] = "[Tax: $" + str(table[-1][2]) + "]"
+    # sort the list by cost
+    table = sorted(table, key=lambda x: x[1], reverse=True)
     print(tabulate(table, headers=["Item", "Cost", "Tax"]))
     # print(tabulate(table))
     print("------------------------------------------------------")

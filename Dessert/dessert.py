@@ -1,8 +1,10 @@
+import functools
 import packaging as packaging
 
 from payment import *
 
 
+@functools.total_ordering
 class DessertItem():
     def __init__(self, name, price, packaging):
         self.name = name
@@ -53,6 +55,19 @@ class DessertItem():
 
     def calculate_tax(self):
         return round(self.calculate_cost() * self.tax_percent() / 100, 2)
+    
+    def is_valid_operand(self, other):
+        return (hasattr(other, "price"))
+    
+    def __eq__(self, other):
+        if not self.is_valid_operand(other):
+            return NotImplemented
+        return self.price == other.price
+
+    def __lt__(self, other):
+        if not self.is_valid_operand(other):
+            return NotImplemented
+        return self.price < other.price
 
 
 class Candy(DessertItem):
@@ -212,7 +227,6 @@ def main_menu():
             order.add(Sundae(name, price, scoop, topping, topping_price))
         # if user enters a blank line, go to the pay_method choice
         elif choice == "":
-            print(order)
             print("1. Cash")
             print("2. Credit")
             print("3. Check")
@@ -225,7 +239,6 @@ def main_menu():
                 order.pay_method = "Check"
             else:
                 print("Invalid choice, please try again.")
-            print(order)
             break
         else:
             print("Invalid choice. Please try again.")
