@@ -1,3 +1,4 @@
+from abc import abstractmethod
 import functools
 import packaging as packaging
 
@@ -68,6 +69,11 @@ class DessertItem():
         if not self.is_valid_operand(other):
             return NotImplemented
         return self.price < other.price
+    
+    def is_same_as(self, other) -> bool:
+        if not self.is_valid_operand(other):
+            return False
+        return self.price == other.price
 
 
 class Candy(DessertItem):
@@ -87,6 +93,14 @@ class Candy(DessertItem):
 
     def __str__(self):
         return f"{self.name} ({self.packaging})\n{self.weight}lbs @ ${self.price:.2f}/lb: "
+        
+    def is_valid_operand(self, other):
+        return (hasattr(other, "price") and hasattr(other, "weight"))
+    
+    def is_same_as(self, other):
+        if not self.is_valid_operand(other):
+            return NotImplemented
+        return self.name == other.name and self.price == other.price
 
 
 class Cookie(DessertItem):
@@ -106,6 +120,14 @@ class Cookie(DessertItem):
 
     def __str__(self):
         return f"{self.name} cookies ({self.packaging})\n{self.number} cookies @ ${self.price:.2f} dozen: "
+        
+    def is_valid_operand(self, other):
+        return (hasattr(other, "price") and hasattr(other, "number"))
+    
+    def is_same_as(self, other):
+        if not self.is_valid_operand(other):
+            return NotImplemented
+        return self.name == other.name and self.price == other.price
 
 
 class IceCream(DessertItem):
@@ -145,12 +167,7 @@ class Sundae(IceCream):
 
     def __str__(self):
         return f"{self.name} Sundae ({self.packaging})\n{self.scoop} scoops @ ${self.price:.2f}/scoop\n {self.topping} topping @ "
-
-# Implement the Payment interface.
-# Add an attribute pay_method that has type PayType to implement the interface.
-# The default value for pay method in the constructor should be PayType.CASH.
-# Add the methods to implement the interface, which make payment method readable and writable.
-# Modify __str__ method to include payment type in the order as shown in the example run.
+    
 
 
 class Order():
@@ -192,6 +209,31 @@ class Order():
 
     def order_tax_str(self):
         return f"Tax: ${self.order_tax():.2f}"
+    
+    #if the new item is not a Candy or a not Cookie or is_same_as() returns False for all items in the order:
+        #i. add the new item to the order
+    #if new item is of type Candy:
+        #i. find the first item for which is_same_as() returns True
+        #ii. add the new item’s weight to the existing item
+    #if new item is of type Cookie:
+        #i. find the first item for which is_same_as() returns True
+        #ii. add the new item’s quantity to the existing item
+    
+    def add_item(self, new_item):
+        if isinstance(new_item, Candy):
+            for item in self.order:
+                if item.is_same_as(new_item):
+                    item.weight += new_item.weight
+                    return
+            self.order.append(new_item)
+        elif isinstance(new_item, Cookie):
+            for item in self.order:
+                if item.is_same_as(new_item):
+                    item.number += new_item.number
+                    return
+            self.order.append(new_item)
+        else:
+            self.order.append(new_item)
 
 
 def main_menu():

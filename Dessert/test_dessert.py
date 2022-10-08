@@ -104,6 +104,17 @@ class testDessertItemPriceComparison(object):
         dessert1 = DessertItem("cookie", 1.00, "box")
         dessert2 = DessertItem("cookie", 2.00, "box")
         assert dessert2 > dessert1
+        
+class testIsSameAs(object):
+    def test_is_same_as(self):
+        dessert1 = DessertItem("cookie", 1.00, "box")
+        dessert2 = DessertItem("cookie", 1.00, "box")
+        assert dessert1.is_same_as(dessert2)
+
+    def test_is_not_same_as(self):
+        dessert1 = DessertItem("cookie", 1.00, "box")
+        dessert2 = DessertItem("cookie", 2.00, "box")
+        assert not dessert1.is_same_as(dessert2)
 
 
 
@@ -128,5 +139,7 @@ if __name__ == "__main__":
     testDessertItemPriceComparison().test_eq()
     testDessertItemPriceComparison().test_lt()
     testDessertItemPriceComparison().test_gt()
+    testIsSameAs().test_is_same_as()
+    testIsSameAs().test_is_not_same_as()
 
     print("All tests passed!")
