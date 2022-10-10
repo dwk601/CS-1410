@@ -3,9 +3,52 @@ from tabulate import *
 from payment import *
 
 
+class Customer:
+    next_customer_id = 0
+
+    def __init__(self, customer_name):
+        self.customer_name = customer_name
+        self.order_history = []
+        self.customer_id = Customer.next_customer_id
+        Customer.next_customer_id += 1
+
+    def add2history(self, order):
+        self.order_history.append(order)
+        return self
+
+
+#Add a yes/no loop so that the program asks the user if they want to start another order as soon as the current order is complete and printed.
+#The user should enter “y” and then press “Enter” for yes, and anything else is no.
 def main():
-    
     order = dessert.main_menu()
+    customer_name = input("What is your name? ")
+    customer = Customer(customer_name)
+    customer.add2history(order)
+    print("Here is your order: ")
+    print(order)
+    print("Here is your order history: ")
+    print(customer.order_history)
+    print("Here is your customer ID: ")
+    print(customer.customer_id)
+
+    while True:
+        print("Would you like to start another order? (y/n): ")
+        choice = input("Enter a choice: ")
+        if choice == ("y"):
+            order = dessert.main_menu()
+            customer_name = input("What is your name? ")
+            customer = Customer(customer_name)
+            customer.add2history(order)
+            print("Here is your order: ")
+            print(order)
+            print("Here is your order history: ")
+            print(customer.order_history)
+            print("Here is your customer ID: ")
+            print(customer.customer_id)
+        elif choice == ("n"):
+            break
+        else:
+            break
     print("------------Receipt------------")
     
     table = []

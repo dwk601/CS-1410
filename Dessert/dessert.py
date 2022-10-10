@@ -210,14 +210,8 @@ class Order():
     def order_tax_str(self):
         return f"Tax: ${self.order_tax():.2f}"
     
-    #if the new item is not a Candy or a not Cookie or is_same_as() returns False for all items in the order:
-        #i. add the new item to the order
-    #if new item is of type Candy:
-        #i. find the first item for which is_same_as() returns True
-        #ii. add the new item’s weight to the existing item
-    #if new item is of type Cookie:
-        #i. find the first item for which is_same_as() returns True
-        #ii. add the new item’s quantity to the existing item
+    def total_cost(self):
+        return self.order_cost()+self.order_tax()
     
     def add_item(self, new_item):
         if isinstance(new_item, Candy):
