@@ -1,7 +1,18 @@
+from ast import PyCF_ALLOW_TOP_LEVEL_AWAIT
 import dessert as dessert
 from tabulate import *
 from payment import *
 
+
+#Add a module-level dictionary called customer_db: Dict[str,Customer]. The key is the customer name and the value is the Customer object.
+#For simplicity we assume that customer names are unique for distinct customers.
+
+#Changes to console application user input
+    #After the order is complete (the user hits enter indicating they don’t want to add any more items), ask for the customer’s name.
+    #Check to see if the customer already exists as a key in the customer_db
+    #If they don’t exist in the customer_db, create a new Customer object and add it to the customer_db
+    #Whether they already existed or not, get the Customer object associated with the customer name in the customer_db and add the order to the Customer object’s order history.
+    #Asking for the customer name should happen AFTER you finish adding items to the order but BEFORE you ask for the payment type.
 
 class Customer:
     next_customer_id = 0
@@ -14,41 +25,60 @@ class Customer:
 
     def add2history(self, order):
         self.order_history.append(order)
-        return self
+        return self.order_history
+
+    def add_order_history(self, order):
+        self.order_history.append(order)
+
+    def __str__(self):
+        return f"Customer Name: {self.customer_name}\nCustomer ID: {self.customer_id}\nOrder History: {self.order_history}"
+
+    def __repr__(self):
+        return f"Customer({self.customer_name})"
+    
+    def get_customer_name(self):
+        return self.customer_name
+    
+    def get_customer_id(self):
+        return self.customer_id
+    
+    
+
 
 
 #Add a yes/no loop so that the program asks the user if they want to start another order as soon as the current order is complete and printed.
 #The user should enter “y” and then press “Enter” for yes, and anything else is no.
 def main():
+    customer_db = {}
     order = dessert.main_menu()
     customer_name = input("What is your name? ")
     customer = Customer(customer_name)
+    #set customer_id
+    customer.generate_customer_id()
     customer.add2history(order)
-    print("Here is your order: ")
-    print(order)
-    print("Here is your order history: ")
-    print(customer.order_history)
-    print("Here is your customer ID: ")
-    print(customer.customer_id)
+    print(customer)
 
     while True:
-        print("Would you like to start another order? (y/n): ")
-        choice = input("Enter a choice: ")
-        if choice == ("y"):
+        another_order = input("Would you like to start another order? (y/n)")
+        if another_order == "y":
             order = dessert.main_menu()
-            customer_name = input("What is your name? ")
-            customer = Customer(customer_name)
             customer.add2history(order)
-            print("Here is your order: ")
-            print(order)
-            print("Here is your order history: ")
-            print(customer.order_history)
-            print("Here is your customer ID: ")
-            print(customer.customer_id)
-        elif choice == ("n"):
-            break
+            print(customer)
         else:
             break
+        if another_order.lower() == 'y':
+            order = dessert.main_menu()
+            customer.add2history(order)
+            print(customer)
+        else:
+            break
+
+    if customer_name not in customer_db:
+        customer_db[customer_name] = customer
+    else:
+        customer_db[customer_name].add2history(order)
+
+    print(customer_db[customer_name])
     print("------------Receipt------------")
     
     table = []
