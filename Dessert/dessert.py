@@ -1,8 +1,9 @@
 from abc import abstractmethod
 import functools
 import packaging as packaging
-
+from dessertshop import *
 from payment import *
+import dessertshop as dessertshop
 
 
 @functools.total_ordering
@@ -170,6 +171,9 @@ class Sundae(IceCream):
     
 
 
+    
+
+
 class Order():
     def __init__(self):
         self.order = []
@@ -213,30 +217,27 @@ class Order():
     def total_cost(self):
         return self.order_cost()+self.order_tax()
     
-    def add_item(self, new_item):
-        if isinstance(new_item, Candy):
-            for item in self.order:
-                if item.is_same_as(new_item):
-                    item.weight += new_item.weight
-                    return
-            self.order.append(new_item)
-        elif isinstance(new_item, Cookie):
-            for item in self.order:
-                if item.is_same_as(new_item):
-                    item.number += new_item.number
-                    return
-            self.order.append(new_item)
-        else:
-            self.order.append(new_item)
+    def add_item(self, item):
+        self.order.append(item)
+
+    def remove_item(self, item):
+        self.order.remove(item)
+
+    def clear(self):
+        self.order = []
+
+
 
 
 def main_menu():
+    customer_list = []
     order = Order()
     while True:
         print("1. Add a Candy")
         print("2. Add a Cookie")
         print("3. Add a Ice Cream")
         print("4. Add a Sundae")
+        print("5. Admin Module")
         print("What would you like to add to the order? (1-4, Enter for done): ")
         choice = input("Enter a choice: ")
         if choice == ("1"):
@@ -261,6 +262,39 @@ def main_menu():
             topping = input("Enter a topping: ")
             topping_price = float(input("Enter a topping price: "))
             order.add(Sundae(name, price, scoop, topping, topping_price))
+        elif choice == ("5"):
+            #1. Shop Customer List
+            #2. Customer Order History
+            #3. Best Customer
+            #4. Exit Admin Module
+            print("1. Shop Customer List")
+            print("2. Customer Order History")
+            print("3. Best Customer")
+            print("4. Exit Admin Module")
+            choice = input("Enter a choice: ")
+            if choice == ("1"):
+                print("1. Add a Customer")
+                print("2. Remove a Customer")
+                print("3. Exit")
+                choice = input("Enter a choice: ")
+                if choice == ("1"):
+                    name = input("Enter a name: ")
+                    customer_list.append(Customer(name))
+                elif choice == ("2"):
+                    name = input("Enter a name: ")
+                    customer_list.remove(Customer(name))
+                elif choice == ("3"):
+                    break
+            elif choice == ("2"):
+                print(Customer.get_order_history())
+            elif choice == ("3"):
+                print(Customer.get_best_customer())
+            elif choice == ("4"):
+                print("Exit Admin Module")
+                break
+            else:
+                print("Invalid choice")
+            
         # if user enters a blank line, go to the pay_method choice
         elif choice == "":
             print("1. Cash")

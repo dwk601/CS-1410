@@ -1,8 +1,8 @@
 from ast import PyCF_ALLOW_TOP_LEVEL_AWAIT
-import dessert as dessert
 from tabulate import *
 from payment import *
-
+from dessert import *
+import dessert as dessert
 
 #Add a module-level dictionary called customer_db: Dict[str,Customer]. The key is the customer name and the value is the Customer object.
 #For simplicity we assume that customer names are unique for distinct customers.
@@ -16,12 +16,15 @@ from payment import *
 
 class Customer:
     next_customer_id = 0
+    customer_db = {}
 
     def __init__(self, customer_name):
         self.customer_name = customer_name
         self.order_history = []
         self.customer_id = Customer.next_customer_id
         Customer.next_customer_id += 1
+        Customer.customer_db[self.customer_name] = self
+
 
     def add2history(self, order):
         self.order_history.append(order)
@@ -39,9 +42,20 @@ class Customer:
     def get_customer_name(self):
         return self.customer_name
     
-    def get_customer_id(self):
-        return self.customer_id
+    def get_order_history(self):
+        return self.order_history
     
+    def get_best_customer(self):
+        best_customer = None
+        best_customer_orders = 0
+        for customer in Customer.customer_db.values():
+            if len(customer.order_history) > best_customer_orders:
+                best_customer = customer
+                best_customer_orders = len(customer.order_history)
+        return best_customer
+    
+    def customer_list(self):
+        return [self.customer_name, self.customer_id, self.order_history]
     
 
 
@@ -50,11 +64,9 @@ class Customer:
 #The user should enter “y” and then press “Enter” for yes, and anything else is no.
 def main():
     customer_db = {}
-    order = dessert.main_menu()
     customer_name = input("What is your name? ")
     customer = Customer(customer_name)
-    #set customer_id
-    customer.generate_customer_id()
+    order = dessert.main_menu()
     customer.add2history(order)
     print(customer)
 
