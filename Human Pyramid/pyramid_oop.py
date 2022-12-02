@@ -59,7 +59,7 @@ def main():
     rows = int(input("Enter the number of rows: "))
     #start the timer
     start_time = perf_counter()
-    #save and write the output to a file named part2.out
+    #save and write the output to a file named part4.out
     sys.stdout = open("part4.out", "w")
     #create a list of list to store the persons
     pyramid = []
