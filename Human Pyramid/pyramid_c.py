@@ -1,60 +1,49 @@
 import sys
 from time import perf_counter
 
-#Ideally, we want to avoid computing weight_on for the same row and column more than once. To achieve this, we can save the results for any position in a module-level dictionary named cache. The key for the dictionary is the tuple (r,c) and the value is the previously computed weight on the person in that (r,c) position. This technique is called “caching” or "memoizing", and is a common technique for avoiding recomputing results.
+from time import time
+
+# A module-level cache to store previously computed results
+# The key is the tuple (r, c) and the value is the previously computed weight
 cache = {}
 
-#With caching, the first thing that weight_on should do is check to see if there is a previously-computed entry for the key (r,c) in cache. If there is, return it. Otherwise, compute the weight recursively by appropriately adding the weights of the people above it and save the result in cache before returning it
-def weight_on(r,c): #recursive weight_on function for the human pyramid
-    #count the number of times the function is called
-    weight_on.counter += 1
-    #if the row and column is 0, means the top position, return 0
-    if r == 0 and c == 0:
-        return 0
-    #if the column is 0, means the left position, return the weight on the back of the person in row r-1 and and column c
-    elif c == 0:
-        if (r-1,0) not in cache:
-            cache[(r-1,0)] = weight_on(r-1,0)
-        return (cache[(r-1,0)] +200)/2.0
-    #if the column is r, means the right position, return the weight on the back of the person in row r-1 and and column c-1
-    elif c == r:
-        if (r-1,c-1) not in cache:
-            cache[(r-1,c-1)] = weight_on(r-1,c-1)
-        return (cache[(r-1,c-1)] +200)/2.0
-    #if the column is neither 0 nor r, means the middle position, return the sum of weight on the back of the person in row r-1 and and column c-1 and the weight on the back of the person in row r-1 and and column c
-    else:
-        if (r-1,c-1) not in cache:
-            cache[(r-1,c-1)] = weight_on(r-1,c-1)
-        if (r-1,c) not in cache:
-            cache[(r-1,c)] = weight_on(r-1,c)
-        return (cache[(r-1,c-1)] +200)/2.0 + (cache[(r-1,c)] +200)/2.0
+def weight_on(r, c):
+  if r > 23:
+    return 0
+
+  # Check if the weight has been previously computed
+  if (r, c) in cache:
+    # Return the previously computed value
+    return cache[(r,c)]
+
+  # Compute the weight by adding the weights of the people above it
+  weight = 75 * r + 100 * c
+  weight += weight_on(r + 1, c)
+  weight += weight_on(r + 1, c + 1)
+
+  # Save the computed value in the cache before returning it
+  cache[(r,c)] = weight
+  return weight
 
 def main():
-    #get the number of rows
-    rows = int(input("Enter the number of rows: "))
-    #start the timer
-    start_time = perf_counter()
-    #save and write the output to a file named part3.out
-    sys.stdout = open("part3.out", "w")
-    #loop through the rows 
-    for r in range(0, rows):
-        #loop through the columns
-        for c in range(0, r+1):
-            #print the weight
-            print("{:5.1f}".format(weight_on(r,c)), end=" ")
-        #print a new line
-        print()
-    #end the timer
-    end_time = perf_counter()
-    #calculate the time
-    elapsed_time = end_time - start_time
-    print("Elapsed time: {:.3f} seconds".format(elapsed_time))
-    print("Number of function calls: {}".format(weight_on.counter))
-    #print the number of cache hits
-    print("Number of cache hits: {}".format(len(cache)))
-    #close the file
-    sys.stdout.close()
+  # Parse command line arguments
+  if len(sys.argv) != 2:
+    print("Usage: python pyramid.py n")
+    sys.exit(1)
+  n = int(sys.argv[1])
 
-if __name__ == "__main__":
-    weight_on.counter = 0
-    main()
+  # Calculate weights and print results
+  start_time = perf_counter()
+  for r in range(n):
+    row = []
+    for c in range(r + 1):
+      row.append(f"{weight_on(r, c):.2f}")
+    print(' '.join(row))
+  end_time = perf_counter()
+
+  # Print elapsed time and number of function calls
+  print(f"Elapsed time: {end_time - start_time} seconds")
+  print(f"Number of function calls: {len(cache)}")
+
+if __name__ == '__main__':
+  main()

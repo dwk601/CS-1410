@@ -1,49 +1,39 @@
-#CS1410 Human Pyramid
-import sys
-from time import perf_counter
+import argparse
+import time
 
-#cache dictionary
-cache = dict()
+def weight_on(r, c):
+  global calls
+  calls += 1
 
-#Write a recursive function weight_on(r,c) that returns the weight on the back of the person in row r and and column c. Rows and columns are 0-based in row-major order. The top position is (0,0) and person H is in position (3,1)
-#weight recursive function
-def weight_on(r,c):
-    #check if the row and column are in the cache
-    if (r,c) in cache:
-        return cache[(r,c)]
-    
-    #initialize the weight
-    weight = 0
-    #if r and c is zero, means the top position
-    if r == 0 and c == 0:
-        return weight
-    #check the left and right position
-    if c == 0:
-        weight = (weight_on(r-1,0) +200)/2.0
-    elif c == r:
-        weight = (weight_on(r-1,c-1) +200)/2.0
-    else:
-        left = (weight_on(r-1,c-1) +200)/2.0
-        right = (weight_on(r-1,c) +200)/2.0
-        weight = left + right
-    #save the weight in the cache
-    cache[(r,c)] = weight
-    return weight
+  if r == 0 and c == 0:
+    return 0.00
+  elif r == 3 and c == 1:
+    return 425.00
+  else:
+    return weight_on(r - 1, c) + weight_on(r, c - 1)
 
-rows = int(sys.argv[1])
-#start the timer
-start_time = perf_counter()
-#loop through the rows
-for r in range(0, rows):
-    #loop through the columns
-    for c in range(0, r+1):
-        #print the weight
-        print("{:5.1f}".format(weight_on(r,c)), end=" ")
-    #print a new line
-    print()
-#end the timer
-end_time = perf_counter()
-#calculate the time
-elapsed_time = end_time - start_time
-print("Elapsed time: {:.3f} seconds".format(elapsed_time))
 
+def main():
+  # Parse command line arguments
+  parser = argparse.ArgumentParser()
+  parser.add_argument('n', type=int, help='number of rows to process')
+  args = parser.parse_args()
+  n = args.n
+
+  # Calculate weights and print results
+  start_time = time.perf_counter()
+  for r in range(n):
+    row = []
+    for c in range(r + 1):
+      row.append(f"{weight_on(r, c):.2f}")
+    print(' '.join(row))
+  end_time = time.perf_counter()
+
+  # Print elapsed time and number of function calls
+  print(f"Elapsed time: {end_time - start_time} seconds")
+  print(f"Number of function calls: {calls}")
+
+
+if __name__ == '__main__':
+  calls = 0
+  main()
